@@ -19,16 +19,17 @@ const generateAccessToken = async () => {
         const auth = Buffer.from(
             PAYPAL_CLIENT_ID + ":" + PAYPAL_CLIENT_SECRET,
         ).toString("base64");
-        const response = await axios.post(`${base}/v1/oauth2/token`, ' grant_type = client_credentials', {
+        const response = await axios.post(`${base}/v1/oauth2/token`, 'grant_type=client_credentials', {
             headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
                 Authorization: `Basic ${auth}`,
             },
         });
 
-        const data = await response.json();
-        return data.access_token;
+        console.log("Access Token:########################################", response.data);
+        return response.data.access_token;
     } catch (error) {
-        console.error("Failed to generate Access Token:", error);
+        console.error("Failed to generate Access Token:###########################################", error);
     }
 };
 
@@ -95,9 +96,8 @@ const captureOrder = async (orderID) => {
 
 async function handleResponse(response) {
     try {
-        const jsonResponse = await response.json();
         return {
-            jsonResponse,
+            response,
             httpStatusCode: response.status,
         };
     } catch (err) {

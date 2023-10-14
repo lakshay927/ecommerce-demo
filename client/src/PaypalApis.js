@@ -3,7 +3,7 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 export default function PayPalApis() {
     const createOrder = (data) => {
         // Order is created on the server and the order id is returned
-        return fetch("localhost:5000/api/neworder", {
+        return fetch("http://localhost:5000/api/neworder", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export default function PayPalApis() {
     };
     const onApprove = (data) => {
         // Order is captured on the server and the response is returned to the browser
-        return fetch("/my-server/capture-paypal-order", {
+        return fetch("http://localhost:5000/api/capture-paypal-order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

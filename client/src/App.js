@@ -69,7 +69,7 @@ function App() {
   }, [])
 
   const initialOptions = {
-    clientId: "test",
+    clientId: "AYr8xP4ZmAZKl4G9noxSNpyjDBgUvapx5iNG19RNvPcnr70H-kqrnPXyKK9lRM4jCZiMpHljgHYO9zaZ",
     currency: "USD",
     intent: "capture",
   };
