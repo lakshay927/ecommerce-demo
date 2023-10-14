@@ -8,6 +8,7 @@ const userSchema = new Schema({
         maxlength: [20, "name is too long"]
     },
     age: { type: Number, required: true, min: 18, max: 100 },
+    profilePhoto: { type: String, required: true },
 
     cart: [{ product: { type: Schema.Types.ObjectId, ref: 'Product' }, quantity: Number }]
 })

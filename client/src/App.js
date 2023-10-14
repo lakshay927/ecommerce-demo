@@ -1,12 +1,24 @@
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useEffect } from "react"
 import './App.css';
 import axios from 'axios';
 import { useState } from 'react';
+import PayPalApis from "./PaypalApis";
 
 function App() {
   const [user, setUser] = useState({})
   const [products, setProducts] = useState([])
   const [cartItems, setCartItems] = useState([])
+  const [image, setImage] = useState("")
+
+  function uploadImage() {
+
+    const formData = new FormData();
+    formData.append("photo", image);
+
+    console.log(image)
+    axios.post('http://localhost:5000/api/uploadimage', formData)
+  }
 
   function addtocart(item) {
 
@@ -55,34 +67,49 @@ function App() {
     if (storedCart)
       setCartItems(storedCart)
   }, [])
+
+  const initialOptions = {
+    clientId: "test",
+    currency: "USD",
+    intent: "capture",
+  };
+
+
   return (
-    <div className="App">
-      <h1>Ecommerce App</h1>
+    <PayPalScriptProvider options={initialOptions}>
+      <div className="App">
+        <h1>Ecommerce App</h1>
 
-      <h1>Products</h1>
-      {products?.map(product => (
-        <>
-          <h3>{product.name}</h3>
-          <button onClick={() => addtocart(product)}>Add to cart</button>
-        </>
-      ))
-      }
+        <h1>Products</h1>
+        {products?.map(product => (
+          <>
+            <h3>{product.name}</h3>
+            <button onClick={() => addtocart(product)}>Add to cart</button>
+          </>
+        ))
+        }
 
-      <h1>Cart</h1>
-      {
-        console.log(cartItems)}
-      {cartItems?.map(cartItem => (
-        <>
-          <h3>{cartItem.name}</h3>
-          <h3>{cartItem.quantity}</h3>
-          <button>+</button>
-          <button>-</button>
-          <button onClick={() => removefromcart(cartItem._id)}>Remove</button>
-        </>
-      ))
-      }
+        <h1>Cart</h1>
+        {
+          console.log(cartItems)}
+        {cartItems?.map(cartItem => (
+          <>
+            <h3>{cartItem.name}</h3>
+            <h3>{cartItem.quantity}</h3>
+            <button>+</button>
+            <button>-</button>
+            <button onClick={() => removefromcart(cartItem._id)}>Remove</button>
+          </>
+        ))
+        }
 
-    </div >
+        <h1>Image Upload</h1>
+        <input type="file" name="photo" onChange={(e) => setImage(e.target.files[0])} />
+        <button onClick={uploadImage}>Upload</button>
+        <PayPalApis />
+
+      </div >
+    </PayPalScriptProvider>
   );
 }
 

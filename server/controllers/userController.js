@@ -1,6 +1,6 @@
 const User = require("../models/userModel")
 const Product = require("../models/productModel")
-
+const { createOrder } = require("../paypal-apis")
 
 // add new user
 async function addNewUser(req, res) {
@@ -129,4 +129,27 @@ async function deleteUser(req, res) {
 
 }
 
-module.exports = { addNewUser, addtocart, UpdateUsers, deleteUser, addNewProduct, getUser, getProducts }
+function uploadImage(req, res) {
+    const path = req.file.path
+
+    const user = User.findByIdAndUpdate(req.params.id, { profilePhoto: path }, { new: true })
+    console.log(req.file)
+    res.status(200).send({ user: req.file })
+
+}
+
+
+async function newOrder(req, res) {
+    try {
+        const { cart } = req.body;
+        const { jsonResponse, httpStatusCode } = await createOrder(cart);
+        res.status(httpStatusCode).json(jsonResponse);
+    }
+    catch (error) {
+        console.error("Failed to create order:", error);
+        res.status(500).json({ error: "Failed to create order." });
+    }
+
+}
+
+module.exports = { addNewUser, addtocart, UpdateUsers, deleteUser, addNewProduct, getUser, getProducts, uploadImage, newOrder }

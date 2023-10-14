@@ -7,6 +7,8 @@ const connectToDB = require('./db/connection')
 const routes = require('./routes/routes')
 const cors = require('cors')
 app.use(express.json())
+app.use(express.static('public'))
+// localhost:5000/images/1697207316391.png
 
 app.use(cors())
 
